@@ -1,7 +1,11 @@
-# 20181212-Pera_Inteligente
+# Pera Inteligente - Smart BedSide Cord Switch
 
-This project builds a small and portable device to switch ON/OFF the light of the room where its (unique) push button is pressed.
-The "smart" part of the project is just its capability to sniff the "Air" for capture the neibourhood list of "ESP-xxxx" APs with their correspondent RSSI signal strength and publish it via MQTT. This data will processed by an external entity, which will, de facto, identify the right appliance to send the instructions for switch ON/OFF.  
+This project builds a small and portable device to switch ON/OFF the light of the (bed)room where its (unique) push button is pressed.
+This is the 21st version of the older bedside cord switch used to operate ceil light ON/OFF in the confort the bed. : )
+
+![Pera](documents/pera.jpg)
+
+The "smart" part of the project is just its capability to sniff the "Air" for capture the neibourhood list of "ESP-xxxx" APs with their correspondent RSSI signal strength and publish it via MQTT. This data will processed by an external entity, which will, de facto, identify the right appliance to send the instructions for switch ON/OFF.
 
 ##
 ## --Hardware--
