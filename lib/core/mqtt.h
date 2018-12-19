@@ -155,10 +155,28 @@ void mqtt_callback() {
 
 
 // MQTT commands to run on setup function.
-int mqtt_setup() {
+void mqtt_setup() {
     int MQTTstatus = mqtt_connect();
     mqtt_callback();
-    return MQTTstatus;
+    if (MQTTstatus == MQTT_CONNECTED) {
+        if (ESP.getResetReason() != "Deep-Sleep Wake") {
+            mqtt_publish(mqtt_pathtele(), "Boot", ESP.getResetReason());
+            mqtt_publish(mqtt_pathtele(), "ChipID", ChipID);
+            mqtt_publish(mqtt_pathtele(), "Brand", BRANDName);
+            mqtt_publish(mqtt_pathtele(), "Model", MODELName);
+            mqtt_publish(mqtt_pathtele(), "SWVer", SWVer);
+        }
+        if (BattPowered) {
+            // Check Battery Level
+            Batt_Level = getVoltage();
+            mqtt_publish(mqtt_pathtele(), "BatLevel", String(Batt_Level));
+            if (Batt_Level > Batt_L_Thrs) mqtt_publish(mqtt_pathtele(), "Status", "Battery");
+            else mqtt_publish(mqtt_pathtele(), "Status", "LOW Battery");
+        }
+        else mqtt_publish(mqtt_pathtele(), "Status", "Mains");
+        mqtt_publish(mqtt_pathtele(), "RSSI", String(getRSSI()));
+        mqtt_publish(mqtt_pathtele(), "IP", WiFi.localIP().toString());
+    }
 }
 
 

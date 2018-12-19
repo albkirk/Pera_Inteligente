@@ -17,8 +17,8 @@ strDateTime DateTime;                         // Global DateTime structure
 static const uint8_t monthDays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 const int NTP_PACKET_SIZE = 48;
 byte packetBuffer[ NTP_PACKET_SIZE];
-volatile unsigned long UTCTimeStamp = 0;      // GLOBALTIME  ( Will be set by NTP)
-volatile unsigned long UnixTimeStamp = 0;     // GLOBALTIME  ( Will be set by NTP)
+volatile unsigned long UTCTimeStamp = 0;      // GLOBAL TIME var ( Will be retrieved via NTP protocol)
+volatile unsigned long UnixTimeStamp = 0;     // GLOBAL TIME var ( Will be devivated from UTCTimeStamp for local time zone)
 unsigned long RefMillis = 0;                  // Millis val for reference
 boolean NTP_Sync = false;                     // NTP is synched?
 unsigned int NTP_Retry = 300;                 // Timer to retry the NTP connection
@@ -113,7 +113,7 @@ unsigned long adjustTimeZone(unsigned long _timeStamp, int _timeZone, bool _isDa
 
 void getNTPtime()
 {
-    unsigned long _unixTime = 0;
+    UTCTimeStamp = 0;                             // Resetting value to 0
 
     if (WiFi.status() == WL_CONNECTED) {
           UDPNTPClient.begin(2390);               // Port for NTP receive
@@ -149,7 +149,7 @@ void getNTPtime()
               unsigned long lowWord = word(packetBuffer[42], packetBuffer[43]);
               unsigned long secsSince1900 = highWord << 16 | lowWord;
               const unsigned long seventyYears = 2208988800UL;
-              _unixTime = secsSince1900 - seventyYears;
+              UTCTimeStamp = secsSince1900 - seventyYears;      // store "Coordinated Universal Time" (UTC) time stamp
           }
 
     }
@@ -158,29 +158,44 @@ void getNTPtime()
           delay(500);
     }
     yield();
-    if (_unixTime > 0) {
-        UTCTimeStamp = _unixTime;                             // store universal time stamp
-        UnixTimeStamp = adjustTimeZone(_unixTime, config.TimeZone, config.isDayLightSaving);
+    if (UTCTimeStamp > 0) {
+        UnixTimeStamp = adjustTimeZone(UTCTimeStamp, config.TimeZone, config.isDayLightSaving);
         NTP_Sync = true;
     }
     else NTP_Sync = false;
 }
 
-
-void curDateTime() {
+unsigned long curUnixTime() {
     ntpNOW = millis();
     if (ntpNOW < RefMillis) getNTPtime();
     cur_unixtime = UnixTimeStamp + (ntpNOW - RefMillis);
+    //telnet_println("Current UNIX time: " + String(cur_unixtime));
+    return cur_unixtime;
+}
+
+
+void curDateTime() {
+    cur_unixtime = curUnixTime();
     DateTime = ConvertTimeStamp(cur_unixtime);
-    telnet_println("NTP time Stamp(UTC): " + String(UTCTimeStamp));
-    telnet_println("Current Local Date: " + String(DateTime.year) + "/" + String(DateTime.month) + "/" + String(DateTime.day));
-    telnet_println("Current Local Time: " + String(DateTime.hour) + ":" + String(DateTime.minute) + ":" + String(DateTime.second));
+    //telnet_println("Current Local Date: " + String(DateTime.year) + "/" + String(DateTime.month) + "/" + String(DateTime.day));
+    //telnet_println("Current Local Time: " + String(DateTime.hour) + ":" + String(DateTime.minute) + ":" + String(DateTime.second));
+}
+
+
+void GoingToSleep(byte Time_minutes = 0) {
+  rtcData.lastUTCTime = curUnixTime();
+  RTC_write();
+  ESP.deepSleep( Time_minutes * 60 * 1000000);   // time in minutes converted to microseconds
 }
 
 
 void ntp_setup () {
     getNTPtime();
-    if (NTP_Sync) curDateTime();
+    if (NTP_Sync) {
+        curDateTime();
+        telnet_println("Current Local Date: " + String(DateTime.year) + "/" + String(DateTime.month) + "/" + String(DateTime.day));
+        telnet_println("Current Local Time: " + String(DateTime.hour) + ":" + String(DateTime.minute) + ":" + String(DateTime.second));
+    }
 }
 
 

@@ -1,4 +1,4 @@
-#include <EEPROM.h>
+#include <ESP_EEPROM.h>
 #define ARDUINOJSON_ENABLE_ARDUINO_STRING 1
 #include <ArduinoJson.h>
 #define EEPROMZize 2048
@@ -9,6 +9,15 @@
     String JsonString="";
     StaticJsonBuffer<1024> MainjsonBuffer;
     JsonObject& root = MainjsonBuffer.createObject();
+
+
+//
+//  Create data Struct that will be store on RTC memmory
+//
+struct {
+  unsigned long lastUTCTime = 0;
+  unsigned int LastWiFiChannel = 1;
+} rtcData;
 
 
 //
@@ -250,8 +259,19 @@ void storage_reset() {
   EEPROM.commit();
 }
 
+boolean RTC_read() {
+  if (ESP.rtcUserMemoryRead(0, (uint32_t*) &rtcData, sizeof(rtcData))) return true;
+  else return false;
+}
+
+boolean RTC_write() {
+  if (ESP.rtcUserMemoryWrite(0, (uint32_t*) &rtcData, sizeof(rtcData))) return true;
+  else return false;
+}
+
 void storage_setup() {
     bool CFG_saved = false;
+    RTC_read();                   // Read the RTC memmory
     EEPROM.begin(EEPROMZize);     // define an EEPROM space of 2048 Bytes to store data
     //storage_reset();            // Hack to reset storage during boot
     config_defaults();
