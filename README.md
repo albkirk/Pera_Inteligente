@@ -1,7 +1,7 @@
 # Pera Inteligente - Smart BedSide Cord Switch
 
 This project builds a small and portable device to switch ON/OFF the light of the (bed)room where its (unique) push button is pressed.
-This is the 21st version of the older bedside cord switch used to operate ceil light ON/OFF in the confort the bed. : )
+This is the 21st version of the older bedside cord switch used to operate ceil light ON/OFF at confort of the warm bed. : )
 
 ![Pera](Documents/Pera.jpg)
 
