@@ -1,4 +1,5 @@
 // Function to insert customized HASSIO Configuration actions
+<<<<<<< HEAD
 // check for entity and device_class in https://www.home-assistant.io/integrations/mqtt/#mqtt-discovery
 // NOTE! entity and device_class must be lowecased, except "None"
 
@@ -12,13 +13,29 @@ void custo_hassio_del(){
 //    delete_entity("switch","switch","Switch");
 //    delete_entity("sensor","none","Timer");
 //    delete_trigger("Button_1");
+=======
+
+void custo_hassio_disc(){
+//    config_entity("switch","Switch");
+//    config_entity("sensor","none","Timer");
+    config_trigger("Button_1", "Button");
+}
+
+void custo_hassio_del(){
+//    delete_entity("switch","Switch");
+//    delete_entity("sensor","none","Timer");
+    delete_trigger("Button_1", "Button");
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }
 
 void custo_hassio_attr(){
     yield();
 //    send_switch_attributes("Switch");         // NOT Used!!
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 void trigger_syncme() {
     yield();
 /*
@@ -26,11 +43,17 @@ void trigger_syncme() {
 
     attributes_doc.clear();
     attributes_doc["ChipID"]                = ChipID;                               // Chip identifier
+<<<<<<< HEAD
     attributes_doc["MODELName"]             = MODELName;                            // Device model name
     attributes_doc["Location"]              = config.Location;                      // Device location
     attributes_doc["DeviceName"]            = config.DeviceName;                    // Device friendly name
     attributes_doc["src_Param"]             = "cover";                              // Source Parameter. Tipically it's the param, but lowercased.
     attributes_doc["Component"]             = "cover";                              // using "component" instead of entity in HA automation/Script
+=======
+    attributes_doc["DeviceName"]            = config.DeviceName;                    // Device friendly name
+    attributes_doc["src_Param"]             = "LEVEL";                              // Source Parameter
+    attributes_doc["Component"]             = "cover";                              // component class
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
     attributes_doc["Attribute"]             = "current_position";                   // entity attribute
     attributes_doc["dst_Param"]             = "Position";                           // Destination Parameter
 
@@ -42,16 +65,26 @@ void trigger_syncme() {
 
 void config_backup() {
     config_doc.clear();
+<<<<<<< HEAD
     config_doc["DeviceName"] = String(config.DeviceName);
     config_doc["Location"]   = String(config.Location);
 /*    config_doc["MIN_Pos"]    = config.MIN_TRAVEL;
     config_doc["MAX_Pos"]    = config.MAX_TRAVEL;
     config_doc["LOWER_Pos"]  = config.LOWER_LEVEL;
     config_doc["UPPER_Pos"]  = config.UPPER_LEVEL;
+=======
+    config_doc["Location"]  = String(config.Location);
+/*
+    config_doc["LOWER_Pos"] = config.LOWER_LEVEL;
+    config_doc["UPPER_Pos"] = config.UPPER_LEVEL;
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 */
     serializeJson(config_doc, config_jsonString);                           //Serialize JSON data to string
     //telnet_println("Backup string: " + String(config_jsonString));
     mqtt_publish(mqtt_pathconf, "BckpRstr", String(config_jsonString), true);
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6

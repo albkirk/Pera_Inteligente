@@ -32,10 +32,16 @@
           Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
         });
         ArduinoOTA.onEnd([]() {
+<<<<<<< HEAD
             //hassio_delete();    // Uncomment this line to force the HASSIO discovery after the upgrade 
             flash_LED(15);      // Flash board led 15 times at end
             telnet_println("\nOTA END with success!");
             global_restart("Upgraded");
+=======
+            flash_LED(15);      // Flash board led 15 times at end
+            telnet_println("\nOTA END with success!");
+            mqtt_restart();
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
         });
         ArduinoOTA.onError([](ota_error_t error) {
             Serial.printf("Error[%u]: ", error);
@@ -47,11 +53,16 @@
             ESPRestart();
         });
 
+<<<<<<< HEAD
       if (WIFI_state != WL_RADIO_OFF) {
           ArduinoOTA.begin();
           telnet_println("Ready for OTA");
       }
       else telnet_println("OTA NOT started -> Radio is OFF.");
+=======
+        ArduinoOTA.begin();
+      telnet_println("Ready for OTA");
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
     }
     else yield();
   }

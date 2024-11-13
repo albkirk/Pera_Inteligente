@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // -- PLATFORM Selection --
 //DO NOT UNCOMMENT don't use this! #define ESP32          // already defined elsewhere...
 //DO NOT UNCOMMENT don't use this! #define ESP8266        // already defined somewhere...
@@ -93,13 +94,37 @@ bool BattPowered =       true;                            // Is the device batte
 #define Display_CLK         -1                            // Display CLK pin,   TS-> 5, T5->18, -1 means NOT used!
 #define Display_RST         -1                            // Display RST pin,   TS-> 9, T5->16, -1 means NOT used!
 #define Display_BUSY        -1                            // Display BUSY pin,  TS->-1, T5-> 4  -1 means NOT used!
+=======
+// HARWARE & SOFTWARE Version
+#define BRANDName "AlBros_Team"                         // Hardware brand name
+#define MODELName "PeraSmart"                           // Hardware model name
+#define SWVer "08.02"                                   // Major.Minor Software version (use String 01.00 - 99.99 format !)
+
+// Power Source & Battery Level
+bool BattPowered = true;                                // Is the device battery powered?
+#define Batt_L_Thrs 15                                  // Battery level threshold [0%-100%] (before slepping forever).
+
+// GPIO to Function Assignment
+#define Using_ADC false                                 // will this device use the ADC? (if not it will measure the internal voltage)
+#define LED_ESP 2                                       // ESP Led is connected to GPIO 2. -1 means NOT used!
+#define DHTTYPE 2                                       // use 1 for "DHT11", 2 for "DHT22", or 3 for "AM2320" to select the DHT Model
+#define DHTPIN -1                                       // GPIO connected to DHT Data PIN. -1 means NO DHT used!
+#define SDAPIN -1                                       // GPIO connected to (AM) I2C SDA PIN. -1 means NO SDA used!
+#define SCKPIN -1                                       // GPIO connected to (AM) I2C SCK PIN. -1 means NO SCK used!
+#define BUZZER -1                                       // (Active) Buzzer pin. Suggest to use pin 0.  -1 means NOT used!
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 
 
 void config_defaults() {
     Serial.println("Setting config Default values");
 
+<<<<<<< HEAD
     strcpy(config.DeviceName, MODELName);                 // Device Name
     strcpy(config.Location, "Home");                      // Device Location
+=======
+    strcpy(config.DeviceName, "Pera");             // Device Name
+    strcpy(config.Location, "MainRoom");                  // Device Location
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
     strcpy(config.ClientID, "001001");                    // Client ID (used on MQTT)
     config.ONTime = 0;                                    // 0-255 seconds (Byte range)
     config.SLEEPTime = 0;                                 // 0-255 minutes (Byte range)
@@ -125,6 +150,7 @@ void config_defaults() {
     strcpy(config.MQTT_Server, "iothubna.hopto.org");     // MQTT Broker Server (URL or IP)
     config.MQTT_Port = 1883;                              // MQTT Broker TCP port
     config.MQTT_Secure = false;                           // 0 - Unsecure, 1 - TLS v1.2 Secured!!
+<<<<<<< HEAD
     strcpy(config.MQTT_User, "mqtt");                     // MQTT Broker username
     strcpy(config.MQTT_Password, "mqttpass!");            // MQTT Broker password
     strcpy(config.UPDATE_Server, "iothubna.hopto.org");   // UPDATE Server (URL or IP)
@@ -143,11 +169,27 @@ void config_defaults() {
     config.HASSIO_CFG = false;                            // Is HASSIO configured? If not, it should perform the discovery.
     config.DEBUG = true;                                  // 0 - No serial msgs, 1 - Debug msg sent to serial interface
     config.SW_Upgraded = false;                           // Is SW Upgrade completed? If not, clean the house and Update status.
+=======
+    strcpy(config.MQTT_User, "admin");                    // MQTT Broker username
+    strcpy(config.MQTT_Password, "admin");                // MQTT Broker password
+    strcpy(config.UPDATE_Server, "iothubna.hopto.org");   // UPDATE Server (URL or IP)
+    config.UPDATE_Port = 1880;                            // UPDATE Server TCP port
+    strcpy(config.UPDATE_User, "user");                   // UPDATE Server username
+    strcpy(config.UPDATE_Password, "1q2w3e4r");           // UPDATE Server password
+    strcpy(config.WEB_User, "admin");                     // WEB Server username
+    strcpy(config.WEB_Password, "admin");                 // WEB Server password
+    config.Temp_Corr = 0.0;                               // Sensor Temperature Correction Factor, typically due to electronic self heat.
+    config.LDO_Corr = 0.6;                                // Battery Voltage [volt] corrective Factor due to LDO/Diode voltage drop
+    config.HW_Module = true;                              // Is HW module plugged (ex.: GPS hardware)used / connected?
+    config.HASSIO_CFG = false;                            // Is HASSIO configured? If not, it should perform the discovery.
+    config.SW_Upgraded = true;                            // Is SW Upgrade completed? If not, clean the house and Update status.
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
     config.SWITCH_Default = false;                        // 0 - OFF, 1 - ON - Default SWITCH Status 
     config.UPPER_LEVEL = 70;                              // level where blinds should stay when pressing double UP
     config.LOWER_LEVEL = 10;                              // level where blinds should stay when pressing double DN
     config.MIN_TRAVEL = 0;                                // Time reference for fully DN position
     config.MAX_TRAVEL = 17000;                            // Time required to go from fully DN to fully UP
+<<<<<<< HEAD
     config.Voltage_Multiplier = 256000;                   // Unit: us/V
     config.Current_Multiplier =  23000;                   // Unit: us/A
     config.Power_Multiplier   = 678000;                   // Unit: us/W
@@ -155,4 +197,9 @@ void config_defaults() {
     config.Volume = 100;                                  // Speaker volume [0-100%].
     config.Alarm_State = false;                           // Alarm state (true -> Ring / False -> Not Ring)
     config.AlarmDateTime = {0, 1, 0, 0, 0, 0, 7, true, 0};// Alarm DateTime structure
+=======
+    config.Voltage_Multiplier = 326341.66;                // Unit: us/V
+    config.Current_Multiplier = 21182.61;                 // Unit: us/A
+    config.Power_Multiplier = 792008.54;                  // Unit: us/W
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }

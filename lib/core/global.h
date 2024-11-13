@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Timers for millis used on Sleeping and LED flash
 unsigned long ONTime_Offset=0;              // [msec]
 unsigned long Extend_time=0;                // [sec]
@@ -116,10 +117,36 @@ void Batt_OK_check() {                      // If LOW Batt, it will DeepSleep fo
         return;                             // Actually, it will never return !!
     }
     else return;                            // Batt OK, returning null
+=======
+void deepsleep_loop() {
+    if (config.DEEPSLEEP && millis() > ONTime_Offset + (ulong(config.ONTime) + Extend_time)*1000) {
+        mqtt_publish(mqtt_pathtele, "Status", "DeepSleep");
+        mqtt_disconnect();
+        telnet_println("Going to sleep until next event... zzZz :) ");
+        //delay(100);
+        telnet_println("Total time ON: " + String(millis()) + " msec");
+        GoingToSleep(config.SLEEPTime, curUTCTime());
+    }
+
+}
+float Batt_OK_check() {                      // If LOW Batt, it will DeepSleep forever!
+    float Batt_Level = getBattLevel();      // Check Battery Level
+    if (Batt_Level < Batt_L_Thrs) {
+          mqtt_publish(mqtt_pathtele, "Status", "LOW Battery");
+          mqtt_publish(mqtt_pathtele, "Battery", String(Batt_Level,0));
+          mqtt_disconnect();
+          telnet_println("Going to sleep forever. Please, recharge the battery ! ! ! ");
+          delay(100);
+          GoingToSleep(0, curUnixTime());   // Sleep forever
+          return Batt_Level;                     // Actually, it will never return !!
+    }
+    return Batt_Level;
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }
 
 void status_report() {
     if (BattPowered) {
+<<<<<<< HEAD
         Batt_OK_check();                    // Update Battery Level and sleeps If LOW Batt.
         if (Batt_Level >100) {
             mqtt_publish(mqtt_pathtele, "Status", "Charging");
@@ -185,4 +212,12 @@ void global_setup() {
 
 void global_loop() {
     global_reset_button();
+=======
+         float Battery = Batt_OK_check();
+         mqtt_publish(mqtt_pathtele, "Status", "Battery");
+         mqtt_publish(mqtt_pathtele, "Battery", String(Battery,0));
+
+    }
+    else mqtt_publish(mqtt_pathtele, "Status", "Mains");
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }

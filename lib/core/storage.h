@@ -4,6 +4,7 @@
  https://github.com/esp8266/Arduino/issues/1539
 */
 #include <EEPROM.h>
+<<<<<<< HEAD
 #define EEPROMZize 2048                     // Lowered 4K to 2KB as it was failing on FireBeetle 
 #define Mem_Start_Pos 512                   // Memory starting point Position for the space to write/read data
 
@@ -26,6 +27,14 @@ struct strDateTime                          // Date & Time Struture for usage on
 };
 #endif
 
+=======
+#define EEPROMZize 4096                     // 4KB
+#define Mem_Start_Pos 1024                  // Memory starting point Position for the space to write/read data
+
+#include <ArduinoJson.h>
+
+bool Load_Default = true;                   // Will it Load Default values? It means it's running for first time.  
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 
 
 //
@@ -108,17 +117,23 @@ struct __attribute__((__packed__)) strConfig {
   long UPDATE_Port;
   char UPDATE_User[16];
   char UPDATE_Password[32];
+<<<<<<< HEAD
   char SIMCardPIN[5];
   char APN[128];
   char MODEM_User[32];
   char MODEM_Password[32];
+=======
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
   char WEB_User[16];
   char WEB_Password[32];
   float Temp_Corr;
   float LDO_Corr;
   bool HW_Module;
   bool HASSIO_CFG;
+<<<<<<< HEAD
   bool DEBUG;
+=======
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
   bool SW_Upgraded;
   bool SWITCH_Default;
   unsigned int UPPER_LEVEL;
@@ -128,10 +143,13 @@ struct __attribute__((__packed__)) strConfig {
   double Voltage_Multiplier;
   double Current_Multiplier;
   double Power_Multiplier;
+<<<<<<< HEAD
   char InitColor[8];
   byte Volume;
   bool Alarm_State;
   strDateTime AlarmDateTime;  
+=======
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 } config;
 
 
@@ -142,6 +160,7 @@ struct __attribute__((__packed__)) strConfig {
 //  STORAGE functions
 //
 void storage_print() {
+<<<<<<< HEAD
     Serial.printf("Config Size: [%d bytes]\r\n", sizeof(config));
     if (sizeof(config) + 16 > (EEPROMZize - Mem_Start_Pos)) Serial.println ("WARNING: Memory zones overlapinng!!");
     Serial.printf("Device Name: %s and Location: %s\r\n", config.DeviceName, config.Location);
@@ -182,6 +201,51 @@ boolean storage_read() {
     }
 }
 
+=======
+
+  Serial.printf("Printing Config [%d bytes]\n", sizeof(config));
+  if (sizeof(config) + 16 > Mem_Start_Pos) Serial.println ("WARNING: Memory zones overlapinng!!");
+  Serial.printf("Device Name: %s and Location: %s\n", config.DeviceName, config.Location);
+  Serial.printf("ON time[sec]: %d  -  SLEEP Time[min]: %d -  DEEPSLEEP enabled: %d\n", config.ONTime, config.SLEEPTime, config.DEEPSLEEP);
+  Serial.printf("LED enabled: %d   -  TELNET enabled: %d  -  OTA enabled: %d  -  WEB enabled: %d\n", config.LED, config.TELNET, config.OTA, config.WEB);
+  Serial.printf("WiFi AP Mode: %d  -  WiFi STA Mode: %d   -  WiFi SSID: %s  -  WiFi Key: %s\n", config.APMode, config.STAMode, config.SSID, config.WiFiKey);
+  
+  Serial.printf("DHCP enabled: %d\n", config.DHCP);
+  if(!config.DHCP) {
+      Serial.printf("IP: %d.%d.%d.%d\t", config.IP[0],config.IP[1],config.IP[2],config.IP[3]);
+      Serial.printf("Mask: %d.%d.%d.%d\t", config.Netmask[0],config.Netmask[1],config.Netmask[2],config.Netmask[3]);
+      Serial.printf("Gateway: %d.%d.%d.%d\n", config.Gateway[0],config.Gateway[1],config.Gateway[2],config.Gateway[3]);
+      Serial.printf("DNS IP: %d.%d.%d.%d\t", config.DNS_IP[0],config.DNS_IP[1],config.DNS_IP[2],config.DNS_IP[3]);
+  }
+  Serial.printf("MQTT Server: %s  -  Port: %ld  -  Secure: %d  -  ", config.MQTT_Server, config.MQTT_Port, config.MQTT_Secure);
+  Serial.printf("MQTT User: %s  -  MQTT Pass: %s\n", config.MQTT_User, config.MQTT_Password);
+  Serial.printf("NTP Server Name: %s\t", config.NTPServerName);
+  Serial.printf("NTP update every %ld minutes.\t", config.Update_Time_Via_NTP_Every);
+  Serial.printf("Timezone: %ld  -  DayLight: %d\n", config.TimeZone, config.isDayLightSaving);
+
+  Serial.printf("Remote Allowed: %d\t", config.Remote_Allow);
+  Serial.printf("WEB User: %s  -  WEB Pass: %s\n", config.WEB_User, config.WEB_Password);
+  Serial.printf("SWITCH default status: %d\t", config.SWITCH_Default);
+  Serial.printf("Temperature Correction: %f\t", config.Temp_Corr);
+  Serial.printf("LDO Voltage Correction: %f\n", config.LDO_Corr);
+  }
+
+boolean storage_read() {
+  Serial.println("Reading Configuration");
+    if (EEPROM.read(0) == 'C' && EEPROM.read(1) == 'F'  && EEPROM.read(2) == 'G' && EEPROMReadlong(3) > 2 && EEPROMReadlong(3) == sizeof(config)) {
+        Serial.println("Configurarion Found!");
+        loadStruct(&config, EEPROMReadlong(3), 15);     // I just decided that it will read/write after address 15
+      return false;   // "false" means no error
+    }
+    else {
+    Serial.println("Configurarion NOT FOUND!!!!");
+        //Serial.println("Value of 0,1,2: " + String(EEPROM.read(0)) + String(EEPROM.read(1)) + String(EEPROM.read(2)));
+        //Serial.println("Value of 3: " + String(EEPROMReadlong(3)));
+    return true;      // "true" means failed to read configuration
+  }
+}
+
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 void storage_write() {
   if (config.DEBUG) Serial.println("Writing Config");
   EEPROM.write(0, 'C');
@@ -209,9 +273,15 @@ void storage_reset() {
 void storage_setup() {
     EEPROM.begin(EEPROMZize);         // define an EEPROM space of 2048 Bytes to store data
     //storage_reset();                // Hack to reset storage during boot
+<<<<<<< HEAD
     config_defaults();                // This initializes the config structure
     Load_Config = storage_read();     // When a configuration exists, it uses stored values
     if (!Load_Config) {               // If NOT, it load DEFAULT VALUES to "config" struct
+=======
+    config_defaults();
+    Load_Default = storage_read();    //When a configuration exists, it uses stored values
+    if (Load_Default) {               // If NOT, it load DEFAULT VALUES to "config" struct
+>>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
         config_defaults();
         storage_write();
     }
