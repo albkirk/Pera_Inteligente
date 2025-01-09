@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // -- PLATFORM Selection --
 //DO NOT UNCOMMENT don't use this! #define ESP32          // already defined elsewhere...
 //DO NOT UNCOMMENT don't use this! #define ESP8266        // already defined somewhere...
@@ -10,10 +9,14 @@
 // -- HARWARE & SOFTWARE Version --
 #define BRANDName           "AlBros_Team"                 // Hardware brand name
 #define MODELName           "PeraSmart"                   // Hardware model name
-#define SWVer               "09.02"                       // Major.Minor Software version (use String 01.00 - 99.99 format !)
+#define SWVer               "09.03"                       // Major.Minor Software version (use String 01.00 - 99.99 format !)
 
 // -- Model Variants Definition --                        // Identify variants for acomodade small code changes 
-//#define ModelVariant                                    // Ex.: MoesHouse cover, Ambisense version,... 
+//-> Comment the definitions using //->
+//#define ModelVariant                                        // Ex.: MoesHouse cover, Ambisense version,... 
+#ifdef ModelVariant
+#else
+#endif
 
 // -- DIGITAL GPIO to Function Assignment --
 #define LED_ESP              8                            // 8266=2, ESP32=22, ESP32C3=8, T-Call=13, TTGoTS=22, T5=19, -1 means NOT used!
@@ -36,20 +39,29 @@
 #define PIN_RED             -1                            // PWM Output PIN for RED  -1 means NOT used!
 #define PIN_GREEN           -1                            // PWM Output PIN for GRREN  -1 means NOT used!
 #define PIN_BLUE            -1                            // PWM Output PIN for BLUE  -1 means NOT used!
-#define NEOPixelsPIN        -1                            // GPIO pin where the NeoPixels is connected.
+#define NEOPixelsPIN        -1                            // NeoPixels DATA GPIO pin.
 #define NEOPixelsNUM        -1                            // Number of NeoPixels LEDs attached
 
 // -- Power Source & Battery Level --
 bool BattPowered =       true;                            // Is the device battery powered?
 #define Res_Div           true                            // Do you have a Resistor divider (ence needs to multiply by 2)?
+#define Res_High           100                            // High Resistor value (in KOhms)
+#define Res_Lower          100                            // Lower Resistor value (in KOhms)
 #define Batt_L_Thrs         15                            // Battery level threshold [0%-100%] (before slepping forever).
-#define Using_ADC         true                            // ESP8266 only. Will you use the ADC? (if not, it will measure the internal voltage)
+#define Using_ADC         true                            // ESP8266 only. Will you use the external ADC? (if not, it will measure the internal voltage)
 //#define IP5306                                          // Power Management chip. TTGo T-Call module uses this.
 
-// -- ADC GPIO & (ESP32 Only)
-#define Batt_ADC_PIN         1                            // IO pin for Battery ADC measurement. Default->36,  TFT->36, EPaper->35
-#define NTC_ADC_PIN         -1                            // IO pin for NTC ADC measurement. Default->36,  TFT->36, EPaper->35
-#define LUX_ADC_PIN         -1                            // IO pin for LUX ADC measurement. Default->36,  TFT->36, EPaper->35
+// -- ADC GPIO & ULP (ESP32 Only)
+//#define ULP_Support                                       //ESP32 ULP support. ESP32-S3 and ESP32-C3 not supported.
+#ifndef ESP8266
+    #define Batt_ADC_PIN     1                            // IO pin for Battery ADC measurement. Default->36,  TFT->36, EPaper->35
+    #define NTC_ADC_PIN     -1                            // IO pin for NTC ADC measurement. Default->36,  TFT->36, EPaper->35
+    #define LUX_ADC_PIN     -1                            // IO pin for LUX ADC measurement. Default->36,  TFT->36, EPaper->35
+#else
+    #define Batt_ADC_PIN    A0
+    #define NTC_ADC_PIN     A0
+    #define LUX_ADC_PIN     A0    
+#endif
 
 // -- SPI PIN Definition --
 #define MISO_PIN            -1                            // SPI MISO pin, , -1 means NOT used!
@@ -58,14 +70,23 @@ bool BattPowered =       true;                            // Is the device batte
 #define CS_PIN              -1                            // SPI CS pin,   , -1 means NOT used!
 
 // -- I2C PIN Definition --
-#define SDAPIN              -1                            // 8266=4, ESP32=21, -1 means NO SDA used!
-#define SCKPIN              -1                            // 8266=5, ESP32=22, -1 means NO SCK used!
+#define SDA_PIN             -1                            // 8266=4, ESP32=21, -1 means NO SDA used!
+#define SCK_PIN             -1                            // 8266=5, ESP32=22, -1 means NO SCK used!
+
+// -- I2S PIN Definition --
+#define I2S_WS              -1                            // Microphone WS PIN 2
+#define I2S_SCK             -1                            // Microphone SCK PIN 14
+#define I2S_SD              -1                            // Microphone SD PIN 15
 
 // -- DHT Definition --
 #define DHTTYPE              2                            // use 1 for "DHT11", 2 for "DHT22", or 3 for "AM2320" to select the DHT Model
 #define DHTPIN              -1                            // GPIO connected to DHT Data PIN. -1 means NO DHT used!
 
-// -- MODEM Definition --
+// -- COMUNICATION Definition --
+//Bluetooth Definition
+#define BLUETOOTH_NAME      MODELName                     // Name of the Bluetooth device
+#define BLUETOOTH_Disabled                                // Comment it if using BT. It disables Bluetooth radio to save energy. 
+
 // Module selection
 //#define TINY_GSM_MODEM_SIM7020                          // SIMCOM 7020 module. 
 //#define TINY_GSM_MODEM_SIM800                           // SIMCOM 800 module. TTGo T-Call module uses this chip
@@ -94,37 +115,13 @@ bool BattPowered =       true;                            // Is the device batte
 #define Display_CLK         -1                            // Display CLK pin,   TS-> 5, T5->18, -1 means NOT used!
 #define Display_RST         -1                            // Display RST pin,   TS-> 9, T5->16, -1 means NOT used!
 #define Display_BUSY        -1                            // Display BUSY pin,  TS->-1, T5-> 4  -1 means NOT used!
-=======
-// HARWARE & SOFTWARE Version
-#define BRANDName "AlBros_Team"                         // Hardware brand name
-#define MODELName "PeraSmart"                           // Hardware model name
-#define SWVer "08.02"                                   // Major.Minor Software version (use String 01.00 - 99.99 format !)
-
-// Power Source & Battery Level
-bool BattPowered = true;                                // Is the device battery powered?
-#define Batt_L_Thrs 15                                  // Battery level threshold [0%-100%] (before slepping forever).
-
-// GPIO to Function Assignment
-#define Using_ADC false                                 // will this device use the ADC? (if not it will measure the internal voltage)
-#define LED_ESP 2                                       // ESP Led is connected to GPIO 2. -1 means NOT used!
-#define DHTTYPE 2                                       // use 1 for "DHT11", 2 for "DHT22", or 3 for "AM2320" to select the DHT Model
-#define DHTPIN -1                                       // GPIO connected to DHT Data PIN. -1 means NO DHT used!
-#define SDAPIN -1                                       // GPIO connected to (AM) I2C SDA PIN. -1 means NO SDA used!
-#define SCKPIN -1                                       // GPIO connected to (AM) I2C SCK PIN. -1 means NO SCK used!
-#define BUZZER -1                                       // (Active) Buzzer pin. Suggest to use pin 0.  -1 means NOT used!
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 
 
 void config_defaults() {
     Serial.println("Setting config Default values");
 
-<<<<<<< HEAD
     strcpy(config.DeviceName, MODELName);                 // Device Name
     strcpy(config.Location, "Home");                      // Device Location
-=======
-    strcpy(config.DeviceName, "Pera");             // Device Name
-    strcpy(config.Location, "MainRoom");                  // Device Location
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
     strcpy(config.ClientID, "001001");                    // Client ID (used on MQTT)
     config.ONTime = 0;                                    // 0-255 seconds (Byte range)
     config.SLEEPTime = 0;                                 // 0-255 minutes (Byte range)
@@ -150,7 +147,6 @@ void config_defaults() {
     strcpy(config.MQTT_Server, "iothubna.hopto.org");     // MQTT Broker Server (URL or IP)
     config.MQTT_Port = 1883;                              // MQTT Broker TCP port
     config.MQTT_Secure = false;                           // 0 - Unsecure, 1 - TLS v1.2 Secured!!
-<<<<<<< HEAD
     strcpy(config.MQTT_User, "mqtt");                     // MQTT Broker username
     strcpy(config.MQTT_Password, "mqttpass!");            // MQTT Broker password
     strcpy(config.UPDATE_Server, "iothubna.hopto.org");   // UPDATE Server (URL or IP)
@@ -169,27 +165,11 @@ void config_defaults() {
     config.HASSIO_CFG = false;                            // Is HASSIO configured? If not, it should perform the discovery.
     config.DEBUG = true;                                  // 0 - No serial msgs, 1 - Debug msg sent to serial interface
     config.SW_Upgraded = false;                           // Is SW Upgrade completed? If not, clean the house and Update status.
-=======
-    strcpy(config.MQTT_User, "admin");                    // MQTT Broker username
-    strcpy(config.MQTT_Password, "admin");                // MQTT Broker password
-    strcpy(config.UPDATE_Server, "iothubna.hopto.org");   // UPDATE Server (URL or IP)
-    config.UPDATE_Port = 1880;                            // UPDATE Server TCP port
-    strcpy(config.UPDATE_User, "user");                   // UPDATE Server username
-    strcpy(config.UPDATE_Password, "1q2w3e4r");           // UPDATE Server password
-    strcpy(config.WEB_User, "admin");                     // WEB Server username
-    strcpy(config.WEB_Password, "admin");                 // WEB Server password
-    config.Temp_Corr = 0.0;                               // Sensor Temperature Correction Factor, typically due to electronic self heat.
-    config.LDO_Corr = 0.6;                                // Battery Voltage [volt] corrective Factor due to LDO/Diode voltage drop
-    config.HW_Module = true;                              // Is HW module plugged (ex.: GPS hardware)used / connected?
-    config.HASSIO_CFG = false;                            // Is HASSIO configured? If not, it should perform the discovery.
-    config.SW_Upgraded = true;                            // Is SW Upgrade completed? If not, clean the house and Update status.
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
     config.SWITCH_Default = false;                        // 0 - OFF, 1 - ON - Default SWITCH Status 
     config.UPPER_LEVEL = 70;                              // level where blinds should stay when pressing double UP
     config.LOWER_LEVEL = 10;                              // level where blinds should stay when pressing double DN
     config.MIN_TRAVEL = 0;                                // Time reference for fully DN position
     config.MAX_TRAVEL = 17000;                            // Time required to go from fully DN to fully UP
-<<<<<<< HEAD
     config.Voltage_Multiplier = 256000;                   // Unit: us/V
     config.Current_Multiplier =  23000;                   // Unit: us/A
     config.Power_Multiplier   = 678000;                   // Unit: us/W
@@ -197,9 +177,4 @@ void config_defaults() {
     config.Volume = 100;                                  // Speaker volume [0-100%].
     config.Alarm_State = false;                           // Alarm state (true -> Ring / False -> Not Ring)
     config.AlarmDateTime = {0, 1, 0, 0, 0, 0, 7, true, 0};// Alarm DateTime structure
-=======
-    config.Voltage_Multiplier = 326341.66;                // Unit: us/V
-    config.Current_Multiplier = 21182.61;                 // Unit: us/A
-    config.Power_Multiplier = 792008.54;                  // Unit: us/W
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }

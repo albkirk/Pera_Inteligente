@@ -87,12 +87,7 @@ void send_NTP_configuration_html()
       if (MyWebServer.argName(i) == "dst") config.isDayLightSaving = true; 
     }
     storage_write();
-<<<<<<< HEAD
     if (config.DEBUG) storage_print();
-=======
-    storage_print();
-    firstStart = true;
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
   }
   MyWebServer.send ( 200, "text/html", PAGE_NTPConfiguration ); 
   Serial.println(__FUNCTION__); 

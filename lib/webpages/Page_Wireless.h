@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-
-
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 //
 //  HTML PAGE
 //
@@ -27,15 +22,11 @@ Connect to Router with these settings:<br>
 </table>
 </form>
 <hr>
-<<<<<<< HEAD
 <strong>Connection State:</strong>
 <table border="0" cellspacing="0" cellpadding="3" style="width:320px" >
 <tr><td><div id="connectionstate">N/A</div></td></tr>
 <tr><td align="left">WiFi Mode :</td><td><span id="x_wlanmode"></span></td></tr>
 <tr><td align="left">RSSI :</td><td><span id="x_wlanRSSI"></span></td></tr></table>
-=======
-<strong>Connection State:</strong><div id="connectionstate">N/A</div>
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 <hr>
 <strong>Networks:</strong><br>
 <table border="0"  cellspacing="3" style="width:320px" >
@@ -48,25 +39,16 @@ Connect to Router with these settings:<br>
 
 function GetState()
 {
-<<<<<<< HEAD
     setValues("/admin/connectionstate");
 }
 function selssid(value)
 {
     document.getElementById("ssid").value = value; 
-=======
-	setValues("/admin/connectionstate");
-}
-function selssid(value)
-{
-	document.getElementById("ssid").value = value; 
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }
 
 
 window.onload = function ()
 {
-<<<<<<< HEAD
     load("style.css","css", function() 
     {
         load("microajax.js","js", function() 
@@ -75,16 +57,6 @@ window.onload = function ()
                     setTimeout(GetState,3000);
         });
     });
-=======
-	load("style.css","css", function() 
-	{
-		load("microajax.js","js", function() 
-		{
-					setValues("/admin/wirelessvalues");
-					setTimeout(GetState,3000);
-		});
-	});
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }
 function load(e,t,n){if("js"==t){var a=document.createElement("script");a.src=e,a.type="text/javascript",a.async=!1,a.onload=function(){n()},document.getElementsByTagName("head")[0].appendChild(a)}else if("css"==t){var a=document.createElement("link");a.href=e,a.rel="stylesheet",a.type="text/css",a.async=!1,a.onload=function(){n()},document.getElementsByTagName("head")[0].appendChild(a)}}
 
@@ -118,16 +90,12 @@ Connect to Router with these settings:<br>
 </table>
 </form>
 <hr>
-<<<<<<< HEAD
 <strong>Connection State:</strong>
 <table border="0" cellspacing="0" cellpadding="0" style="width:320px" >
 <tr><td><div id="connectionstate">N/A</div></td></tr>
 <tr><td align="left">WiFi Mode :</td><td><span id="x_wlanmode"></span></td></tr>
 <tr><td align="left">RSSI :</td><td><span id="x_wlanRSSI"></span></td></tr>
 </table>
-=======
-<strong>Connection State:</strong><div id="connectionstate">N/A</div>
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 <hr>
 <strong>Networks:</strong><br>
 <table border="0"  cellspacing="3" style="width:320px" >
@@ -140,25 +108,16 @@ Connect to Router with these settings:<br>
 
 function GetState()
 {
-<<<<<<< HEAD
     setValues("/admin/connectionstate");
 }
 function selssid(value)
 {
     document.getElementById("ssid").value = value; 
-=======
-	setValues("/admin/connectionstate");
-}
-function selssid(value)
-{
-	document.getElementById("ssid").value = value; 
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }
 
 
 window.onload = function ()
 {
-<<<<<<< HEAD
     load("style.css","css", function() 
     {
         load("microajax.js","js", function() 
@@ -167,16 +126,6 @@ window.onload = function ()
                     setTimeout(GetState,3000);
         });
     });
-=======
-	load("style.css","css", function() 
-	{
-		load("microajax.js","js", function() 
-		{
-					setValues("/admin/wirelessvalues");
-					setTimeout(GetState,3000);
-		});
-	});
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }
 function load(e,t,n){if("js"==t){var a=document.createElement("script");a.src=e,a.type="text/javascript",a.async=!1,a.onload=function(){n()},document.getElementsByTagName("head")[0].appendChild(a)}else if("css"==t){var a=document.createElement("link");a.href=e,a.rel="stylesheet",a.type="text/css",a.async=!1,a.onload=function(){n()},document.getElementsByTagName("head")[0].appendChild(a)}}
 
@@ -200,7 +149,6 @@ Configuring. Please Wait.... You may need to refresh your browser.
 
 void send_wireless_configuration_html()
 {
-<<<<<<< HEAD
     
     if (MyWebServer.args() > 0 )  // Save Settings
     {
@@ -250,57 +198,6 @@ void send_wireless_configuration_html()
         else MyWebServer.send ( 200, "text/html", PAGE_WirelessConfiguration ); 
     }
     Serial.println(__FUNCTION__); 
-=======
-	
-	if (MyWebServer.args() > 0 )  // Save Settings
-	{
-		String temp = "";
-		config.STAMode = false;
-		config.APMode = false;
-		config.DHCP = false;
-		for ( uint8_t i = 0; i < MyWebServer.args(); i++ ) { 
-			if (MyWebServer.argName(i) == "ssid") strcpy(config.SSID,   urldecode(MyWebServer.arg(i)).c_str());
-			if (MyWebServer.argName(i) == "WiFiKey" && urldecode(MyWebServer.arg(i)) != "") strcpy(config.WiFiKey, urldecode(MyWebServer.arg(i)).c_str());
-			if (MyWebServer.argName(i) == "STAEnabled") config.STAMode = true;
-			if (MyWebServer.argName(i) == "APEnabled") config.APMode = true;
-			if (MyWebServer.argName(i) == "dhcp") config.DHCP = true;
-		}
-		if (!config.DHCP) {
-			for ( uint8_t i = 0; i < MyWebServer.args(); i++ ) { 
-				if (MyWebServer.argName(i) == "ip_0") if (checkRange(MyWebServer.arg(i))) 	config.IP[0] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "ip_1") if (checkRange(MyWebServer.arg(i))) 	config.IP[1] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "ip_2") if (checkRange(MyWebServer.arg(i))) 	config.IP[2] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "ip_3") if (checkRange(MyWebServer.arg(i))) 	config.IP[3] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "nm_0") if (checkRange(MyWebServer.arg(i))) 	config.Netmask[0] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "nm_1") if (checkRange(MyWebServer.arg(i))) 	config.Netmask[1] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "nm_2") if (checkRange(MyWebServer.arg(i))) 	config.Netmask[2] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "nm_3") if (checkRange(MyWebServer.arg(i))) 	config.Netmask[3] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "gw_0") if (checkRange(MyWebServer.arg(i))) 	config.Gateway[0] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "gw_1") if (checkRange(MyWebServer.arg(i))) 	config.Gateway[1] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "gw_2") if (checkRange(MyWebServer.arg(i))) 	config.Gateway[2] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "gw_3") if (checkRange(MyWebServer.arg(i))) 	config.Gateway[3] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "dn_0") if (checkRange(MyWebServer.arg(i))) 	config.DNS_IP[0] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "dn_1") if (checkRange(MyWebServer.arg(i))) 	config.DNS_IP[1] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "dn_2") if (checkRange(MyWebServer.arg(i))) 	config.DNS_IP[2] =  MyWebServer.arg(i).toInt();
-				if (MyWebServer.argName(i) == "dn_3") if (checkRange(MyWebServer.arg(i))) 	config.DNS_IP[3] =  MyWebServer.arg(i).toInt();
-			}
-
-		}
-		yield();
-		MyWebServer.send ( 200, "text/html", PAGE_WaitAndReload );
-		wifi_connect();
-		if ( WIFI_state == WL_CONNECTED || config.STAMode == false ) storage_write();
-		storage_print();
-		AdminTimeOutCounter=0;
-		
-	}
-	else
-	{
-		if (config.DHCP) MyWebServer.send ( 200, "text/html", PAGE_WiiFiDHCPConfiguration ); 
-		else MyWebServer.send ( 200, "text/html", PAGE_WirelessConfiguration ); 
-	}
-	Serial.println(__FUNCTION__); 
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }
 
 
@@ -312,7 +209,6 @@ void send_wireless_configuration_html()
 void send_wireless_configuration_values_html()
 {
 
-<<<<<<< HEAD
     String values ="";
 
     values += "ssid|" + (String) config.SSID + "|input\n";
@@ -347,42 +243,6 @@ void send_wireless_configuration_values_html()
     MyWebServer.send ( 200, "text/plain", values);
     Serial.println(__FUNCTION__); 
     
-=======
-	String values ="";
-
-	values += "ssid|" + (String) config.SSID + "|input\n";
-	//values += "WiFiKey|" +  (String) config.WiFiKey  + "|input\n";   // KEEP IT COMMENTED TO NOT SHOW THE WiFi KEY!!!
-	values += "STAEnabled|" + (String) (config.STAMode ? "checked" : "") + "|chk\n";
-	values += "APEnabled|" + (String) (config.APMode ? "checked" : "") + "|chk\n";
-	values += "dhcp|" +  (String) (config.DHCP ? "checked" : "") + "|chk\n";
-	if (config.DHCP) {
-  		values += "x_ip|" +  (String) WiFi.localIP()[0] + "." +  (String) WiFi.localIP()[1] + "." +  (String) WiFi.localIP()[2] + "." + (String) WiFi.localIP()[3] +  "|div\n";
-  		values += "x_gateway|" +  (String) WiFi.gatewayIP()[0] + "." +  (String) WiFi.gatewayIP()[1] + "." +  (String) WiFi.gatewayIP()[2] + "." + (String) WiFi.gatewayIP()[3] +  "|div\n";
-  		values += "x_netmask|" +  (String) WiFi.subnetMask()[0] + "." +  (String) WiFi.subnetMask()[1] + "." +  (String) WiFi.subnetMask()[2] + "." + (String) WiFi.subnetMask()[3] +  "|div\n";
-  		values += "x_dns_ip|" +  (String) WiFi.dnsIP()[0] + "." +  (String) WiFi.dnsIP()[1] + "." +  (String) WiFi.dnsIP()[2] + "." + (String) WiFi.dnsIP()[3] +  "|div\n";
-	}
-	else {
-		values += "ip_0|" +  (String) config.IP[0] + "|input\n";
-		values += "ip_1|" +  (String) config.IP[1] + "|input\n";
-		values += "ip_2|" +  (String) config.IP[2] + "|input\n";
-		values += "ip_3|" +  (String) config.IP[3] + "|input\n";
-		values += "nm_0|" +  (String) config.Netmask[0] + "|input\n";
-		values += "nm_1|" +  (String) config.Netmask[1] + "|input\n";
-		values += "nm_2|" +  (String) config.Netmask[2] + "|input\n";
-		values += "nm_3|" +  (String) config.Netmask[3] + "|input\n";
-		values += "gw_0|" +  (String) config.Gateway[0] + "|input\n";
-		values += "gw_1|" +  (String) config.Gateway[1] + "|input\n";
-		values += "gw_2|" +  (String) config.Gateway[2] + "|input\n";
-		values += "gw_3|" +  (String) config.Gateway[3] + "|input\n";
-		values += "dn_0|" +  (String) config.DNS_IP[0] + "|input\n";
-		values += "dn_1|" +  (String) config.DNS_IP[1] + "|input\n";
-		values += "dn_2|" +  (String) config.DNS_IP[2] + "|input\n";
-		values += "dn_3|" +  (String) config.DNS_IP[3] + "|input\n";		
-	}
-	MyWebServer.send ( 200, "text/plain", values);
-	Serial.println(__FUNCTION__); 
-	
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }
 
 
@@ -393,7 +253,6 @@ void send_wireless_configuration_values_html()
 void send_connection_state_values_html()
 {
 
-<<<<<<< HEAD
     String state = "N/A";
     String Networks = "";
     if (WiFi.status() >= 0 && WiFi.status() <=6) state = WIFI_state_Name[WiFi.status()];
@@ -444,51 +303,5 @@ void send_connection_state_values_html()
     values += "networks|" +  Networks + "|div\n";
     MyWebServer.send ( 200, "text/plain", values);
     Serial.println(__FUNCTION__); 
-=======
-	String state = "N/A";
-	String Networks = "";
-	if (WiFi.status() >= 0 && WiFi.status() <=6) state = WIFI_state_Name[WiFi.status()];
-
-	 int n = WiFi.scanNetworks();
-
-	 if (n == 0)
-	 {
-		 Networks = "<font color='#FF0000'>No networks found!</font>";
-	 }
-	else
-    {
-	 
-		
-		Networks = "Found " +String(n) + " Networks<br>";
-		Networks += "<table border='0' cellspacing='0' cellpadding='3'>";
-		Networks += "<tr bgcolor='#DDDDDD' ><td><strong>Name</strong></td><td><strong>Quality</strong></td><td><strong>Enc</strong></td><tr>";
-		for (int i = 0; i < n; ++i)
-		{
-			int quality=0;
-			if(WiFi.RSSI(i) <= -100)
-			{
-					quality = 0;
-			}
-			else if(WiFi.RSSI(i) >= -50)
-			{
-					quality = 100;
-			}
-			else
-			{
-				quality = 2 * (WiFi.RSSI(i) + 100);
-			}
-
-
-			Networks += "<tr><td><a href='javascript:selssid(\""  +  String(WiFi.SSID(i))  + "\")'>"  +  String(WiFi.SSID(i))  + "</a></td><td>" +  String(quality) + "%</td><td>" +  String((WiFi.encryptionType(i) == 0)?" ":"*")  + "</td></tr>"; // 0=>authenticate mode OPEN
-		}
-		Networks += "</table>";
-	}
-   
-	String values ="";
-	values += "connectionstate|" +  state + "|div\n";
-	values += "networks|" +  Networks + "|div\n";
-	MyWebServer.send ( 200, "text/plain", values);
-	Serial.println(__FUNCTION__); 
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 
 }

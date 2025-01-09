@@ -3,11 +3,6 @@
 #include <Wire.h>
 #include <AM2320.h>
 
-#ifdef ESP8266
-    #define Batt_ADC_PIN A0
-    #define NTC_ADC_PIN  A0
-    #define LUX_ADC_PIN  A0    
-#endif
 
 // Initialize DHT/AM sensor.
 #define DHT_11 1
@@ -29,10 +24,7 @@ float Temperature = 0.0;                    // Variable
 float Humidity = 0.0;                       // Variable
 float HumVelocity = 0.0;                    // Variable
 float Lux = 0.0;                            // Variable
-<<<<<<< HEAD
 float Lux_Last = 0.0;                       // Variable
-=======
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 float Tempe_MAX = -100.0;                   // Variable
 float Tempe_MIN = 100.0;                    // Variable
 
@@ -73,11 +65,7 @@ void I2C_scan() {
 }
 
 
-<<<<<<< HEAD
 float getNTCThermister(byte adc_pin = NTC_ADC_PIN) {
-=======
-float getNTCThermister(byte adc_pin = Default_ADC_PIN) {
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
   // Return temperature as Celsius
   int val = 0;
   for(int i = 0; i < Number_of_measures; i++) {         // ADC value is read N times
@@ -164,11 +152,7 @@ float getHumidity() {
 return -1;
 }
 
-<<<<<<< HEAD
 float getLux (byte adc_pin = LUX_ADC_PIN, int Nmeasures = Number_of_measures, float Max_val = 3050, float Min_val = 0) {
-=======
-float getLux (byte adc_pin = Default_ADC_PIN, int Nmeasures = Number_of_measures, float Max_val = 910, float Min_val = 55) {
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
     // adc_pin A0 on ESP8266 and 35 or 36 on ESP32
 	// 910 and 55 are empiric values extract while testing the circut
     float lux = 0.0;
@@ -232,7 +216,6 @@ void ambient_setup() {
             Wire.begin(SDAPIN, SCKPIN);
         }
     }
-<<<<<<< HEAD
 
 #ifdef ESP32
     if (NTC_ADC_PIN>=0) {
@@ -244,6 +227,4 @@ void ambient_setup() {
         adcAttachPin(LUX_ADC_PIN);                      // An input of 3 volts is reduced to 0.833 volts before ADC measurement
     }
 #endif
-=======
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }

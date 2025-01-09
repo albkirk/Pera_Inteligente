@@ -60,10 +60,7 @@ void send_information_values_html ()
   String values ="";
 
   values += "x_ssid|" + (String)WiFi.SSID() + "|div\n";
-<<<<<<< HEAD
   values += "x_wlanmode|" + (String)WiFi.getMode() + "|div\n";
-=======
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
   values += "x_ip|" + (String) WiFi.localIP()[0] + "." + (String) WiFi.localIP()[1] + "." + (String) WiFi.localIP()[2] + "." + (String) WiFi.localIP()[3] + "|div\n";
   values += "x_gateway|" + (String) WiFi.gatewayIP()[0] + "." + (String) WiFi.gatewayIP()[1] + "." + (String) WiFi.gatewayIP()[2] + "." + (String) WiFi.gatewayIP()[3] + "|div\n";
   values += "x_netmask|" + (String) WiFi.subnetMask()[0] + "." + (String) WiFi.subnetMask()[1] + "." + (String) WiFi.subnetMask()[2] + "." + (String) WiFi.subnetMask()[3] + "|div\n";

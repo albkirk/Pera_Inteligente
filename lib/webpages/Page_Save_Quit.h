@@ -18,11 +18,7 @@ Save and quit to start in normal operation.<br>
 
 function SaveQuit()
 {
-<<<<<<< HEAD
     setValues("/admin/savequit");
-=======
-	setValues("/admin/savequit");
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }
 
 window.onload = function ()
@@ -53,37 +49,22 @@ The Web Server is no longer enabled. Please, close this web page.
 
 void send_save_quit_html()
 {
-<<<<<<< HEAD
         yield();
     MyWebServer.send ( 200, "text/html", PAGE_Save_Quit );
-        telnet_println(__FUNCTION__);
-=======
-		yield();
-    MyWebServer.send ( 200, "text/html", PAGE_Save_Quit );
-		Serial.println(__FUNCTION__);
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
+        Serial.println(__FUNCTION__);
 }
 
 void execute_save_quit_html()
 {
-<<<<<<< HEAD
         telnet_println("Web Page Save & Quit button pushed!!! ");
          MyWebServer.send ( 200, "text/html", PAGE_SaveAndQuit );
-=======
-		Serial.println("Web Page Save & Quit button pushed!!! ");
- 		MyWebServer.send ( 200, "text/html", PAGE_SaveAndQuit );
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 
     MyWebServer.stop();
     config.TELNET = false;
-    config.OTA = false;
+    config.OTA = true;
     config.WEB = false;
     config.APMode = false;
     config.LED = false;
     storage_write();
-<<<<<<< HEAD
         ESPRestart();
-=======
-		ESPRestart();
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }

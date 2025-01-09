@@ -76,11 +76,7 @@ String urldecode(String input) // (based on https://code.google.com/p/avr-netino
 
 // MAIN Functions
 
-<<<<<<< HEAD
   // Include the HTML, STYLE and Script "Pages"
-=======
-	// Include the HTML, STYLE and Script "Pages"
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 #include "Page_Admin.h"
 #include "Page_Script.js.h"
 #include "Page_Style.css.h"
@@ -88,7 +84,6 @@ String urldecode(String input) // (based on https://code.google.com/p/avr-netino
 #include "Page_MQTT.h"
 #include "Page_Information.h"
 #include "Page_General.h"
-<<<<<<< HEAD
 #include "Page_Wireless.h"
 #include "Page_FactoryReset.h"
 #include "Page_Save_Quit.h"
@@ -98,12 +93,6 @@ String urldecode(String input) // (based on https://code.google.com/p/avr-netino
 #ifdef GPS_WEB
   #include "Page_GPS.h"
 #endif
-=======
-#include "PAGE_Wireless.h"
-#include "Page_FactoryReset.h"
-#include "Page_Save_Quit.h"
-
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 
 void web_setup() {
 
@@ -111,7 +100,6 @@ void web_setup() {
         // Start HTTP Server for configuration
     MyWebServer.on ( "/", []() { MyWebServer.send ( 200, "text/html", PAGE_AdminMainPage);   }  );
 
-<<<<<<< HEAD
     MyWebServer.on ( "/admin.html", []() { MyWebServer.send ( 200, "text/html", PAGE_AdminMainPage );   }  );
     MyWebServer.on ( "/wireless.html", send_wireless_configuration_html );
     MyWebServer.on ( "/mqtt.html", send_mqtt_html );
@@ -154,33 +142,6 @@ void web_setup() {
         telnet_println("My Web server has started for " + String(Extend_time/60) + " minutes");
     }
     else telnet_println("Web server NOT started -> Radio is OFF.");
-=======
-	  MyWebServer.on ( "/admin.html", []() { MyWebServer.send ( 200, "text/html", PAGE_AdminMainPage );   }  );
-	  MyWebServer.on ( "/wireless.html", send_wireless_configuration_html );
-	  MyWebServer.on ( "/mqtt.html", send_mqtt_html );
-	  MyWebServer.on ( "/info.html", []() { MyWebServer.send ( 200, "text/html", PAGE_Information );   }  );
-	  MyWebServer.on ( "/ntp.html", send_NTP_configuration_html  );
-	  MyWebServer.on ( "/general.html", send_general_html  );
-  	MyWebServer.on ( "/reset.html", send_factory_reset_html  );
-  	MyWebServer.on ( "/savequit.html", send_save_quit_html  );
-
-	  MyWebServer.on ( "/admin/wirelessvalues", send_wireless_configuration_values_html );
-	  MyWebServer.on ( "/admin/connectionstate", send_connection_state_values_html );
-    MyWebServer.on ( "/admin/mqttvalues", send_mqtt_values_html );
-	  MyWebServer.on ( "/admin/infovalues", send_information_values_html );
-	  MyWebServer.on ( "/admin/ntpvalues", send_NTP_configuration_values_html );
-	  MyWebServer.on ( "/admin/generalvalues", send_general_configuration_values_html);
-	  MyWebServer.on ( "/admin/reset",     execute_factory_reset_html);
-	  MyWebServer.on ( "/admin/savequit",     execute_save_quit_html);
-
-	  MyWebServer.on ( "/favicon.ico",   []() { MyWebServer.send ( 200, "text/html", "" );   }  );
-	  MyWebServer.on ( "/style.css", []() { MyWebServer.send ( 200, "text/plain", PAGE_Style_css );  } );
-	  MyWebServer.on ( "/microajax.js", []() { MyWebServer.send ( 200, "text/plain", PAGE_microajax_js );  } );
-	  MyWebServer.onNotFound ( []() { MyWebServer.send ( 400, "text/html", "Page not Found" );   }  );
-    MyWebServer.begin();
-    Extend_time = 900;
-    telnet_println("My Web server has started for " + String(Extend_time/60) + " minutes");
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
   }
   else {
     MyWebServer.close();

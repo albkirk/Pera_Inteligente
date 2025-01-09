@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // Timers for millis used on Sleeping and LED flash
 unsigned long ONTime_Offset=0;              // [msec]
 unsigned long Extend_time=0;                // [sec]
@@ -22,6 +21,41 @@ static long TIMER_Current = 0;
 unsigned long COUNTER = 0;
 float Batt_Level = 0;
 float Batt_Last  = 0;
+bool CPU_High = false;                      // System flag indicating being busy executing any CPU intensive task, such capture VIDEO
+
+
+String trimword( String str) {
+    str.toLowerCase();
+    str.replace(" ", "_");
+    str.replace("-", "_");
+    return str;
+}
+
+void storage_print() {
+    telnet_println("Config Size: [" + String(sizeof(config)) + " bytes]");
+    if (sizeof(config) + 16 > (EEPROMZize - Mem_Start_Pos)) Serial.println ("-- WARNING: Memory zones overlapinng!! --");
+    telnet_println("Device Name: " + String(config.DeviceName) + "  -  Location: " + String(config.Location));
+    telnet_println("ON time[sec]: " + String(config.ONTime) + "  -  Extend_time[sec]:" + String(Extend_time) + "  -  SLEEP Time[min]: " + String(config.SLEEPTime) + " -  DEEPSLEEP enabled: " + String(config.DEEPSLEEP));
+    telnet_println("LED enabled: " + String(config.LED) + "   -  TELNET enabled: " + String(config.TELNET) + "  -  OTA enabled: " + String(config.OTA) + "  -  WEB enabled: " + String(config.WEB));
+    telnet_println("WiFi AP Mode: " + String(config.APMode) + "  -  WiFi STA Mode: " + String(config.STAMode) + "   -  WiFi SSID: " + String(config.SSID) + "  -  WiFi Key: " + String(config.WiFiKey));
+  
+    telnet_println("DHCP enabled: " + String(config.DHCP));
+    if(!config.DHCP) {
+      telnet_print("IP: " + String(config.IP[0]) + "." + String(config.IP[1]) + "." + String(config.IP[2]) + "." + String(config.IP[3]) + "  -  ");
+      telnet_print("Mask: "  + String(config.Netmask[0]) + "." + String(config.Netmask[1]) + "." + String(config.Netmask[2]) + "." + String(config.Netmask[3]) + "  -  ");
+      telnet_print("Gateway: " + String(config.Gateway[0]) + "." + String(config.Gateway[1]) + "." + String(config.Gateway[2]) + "." + String(config.Gateway[3]) + "  -  ");
+      telnet_println("DNS IP: " + String(config.DNS_IP[0]) + "." + String(config.DNS_IP[1]) + "." + String(config.DNS_IP[2]) + "." + String(config.DNS_IP[3]));
+    }
+    telnet_println("MODEM APN: " + String(config.APN) + "  -  User: " + String(config.MODEM_User) + "  -  Pass: " + String(config.MODEM_Password) + "  -  PIN: " + String(config.SIMCardPIN));
+    telnet_print("MQTT Server: " + String(config.MQTT_Server) + "  -  Port: " + String(config.MQTT_Port) + "  -  Secure: " + String(config.MQTT_Secure) + "  -  ");
+    telnet_println("MQTT User: " + String(config.MQTT_User) + "  -  MQTT Pass: " + String(config.MQTT_Password));
+    telnet_print("NTP Server Name: " + String(config.NTPServerName) + "  -  ");
+    telnet_print("NTP update every " + String(config.Update_Time_Via_NTP_Every) + " minutes  -  ");
+    telnet_println("Timezone: " + String(config.TimeZone) + "  -  DayLight: " + String(config.isDayLightSaving));
+
+    telnet_println("Debug: " + String(config.DEBUG) + "  -  HW Module: " + String(config.HW_Module) + "  -  Remote Allowed: " + String(config.Remote_Allow) + "  -  WEB User: " + String(config.WEB_User) + "  -  WEB Pass: " + String(config.WEB_Password));
+    telnet_println("SWITCH default: " + String(config.SWITCH_Default) + "  -  Temperature Correction: " + String(config.Temp_Corr) + "  -  Voltage Correction: " + String(config.LDO_Corr));
+}
 
 
 void blink_LED(unsigned int slot, int bl_LED = LED_ESP, bool LED_OFF = !config.LED) { // slot range 1 to 10 =>> 3000/300
@@ -57,16 +91,17 @@ void Buzz(unsigned int n_beeps = 1, unsigned long buzz_time = BUZZER_millis ) {
     }
 }
 
-void deepsleep_loop() {
-    if (config.DEEPSLEEP && millis() > ONTime_Offset + (ulong(config.ONTime) + Extend_time)*1000) {
-        mqtt_publish(mqtt_pathtele, "Status", "DeepSleep");
-        mqtt_disconnect();
-        telnet_println("Going to sleep for " + String(SLEEPTime) + " min, or until next event ... zzZz :) ");
-        //delay(100);
-        telnet_println("Total time ON: " + String(millis()) + " msec");
-        GoingToSleep(SLEEPTime, curUTCTime());
-    }
+void GoingToSleep(unsigned long deepsleeptime = SLEEPTime, String status_msg = "DeepSleep") {
+    mqtt_publish(mqtt_pathtele, "Status", status_msg);
+    mqtt_disconnect();
+    telnet_println("Going to sleep for " + String(deepsleeptime) + " seconds, or until next event ... zzZz :) ");
+    //delay(100);
+    telnet_println("Total time ON: " + String(millis()) + " msec");
+    if (config.TELNET) telnet_stop();
+    esp_deepsleep(deepsleeptime, curUTCTime());
 }
+
+// ONTime_timeout_loop() {}  ->located in lib/core/actions.h to be declared at the end of the program.
 
 float getBattLevel() {                                      // return Battery level in Percentage [0 - 100%]
 #ifdef IP5306
@@ -82,10 +117,8 @@ float getBattLevel() {                                      // return Battery le
     if (Batt_ADC_PIN<0) return -1;
     else {
         float voltage = 0.0;                                    // Input Voltage [v]
-    
         for(int i = 0; i < Number_of_measures; i++) {
-            if(Res_Div) voltage += ReadVoltage() * 2;
-            else voltage += ReadVoltage();
+            voltage += ReadVoltage();
             delay(1);
         }
         voltage = voltage / Number_of_measures + config.LDO_Corr; 
@@ -113,40 +146,14 @@ void Batt_OK_check() {                      // If LOW Batt, it will DeepSleep fo
         //#endif
         flash_LED(10);
         delay(100);
-        GoingToSleep(0, curUnixTime());     // Sleep forever
+        esp_deepsleep(0, curUTCTime());     // Sleep forever
         return;                             // Actually, it will never return !!
     }
     else return;                            // Batt OK, returning null
-=======
-void deepsleep_loop() {
-    if (config.DEEPSLEEP && millis() > ONTime_Offset + (ulong(config.ONTime) + Extend_time)*1000) {
-        mqtt_publish(mqtt_pathtele, "Status", "DeepSleep");
-        mqtt_disconnect();
-        telnet_println("Going to sleep until next event... zzZz :) ");
-        //delay(100);
-        telnet_println("Total time ON: " + String(millis()) + " msec");
-        GoingToSleep(config.SLEEPTime, curUTCTime());
-    }
-
-}
-float Batt_OK_check() {                      // If LOW Batt, it will DeepSleep forever!
-    float Batt_Level = getBattLevel();      // Check Battery Level
-    if (Batt_Level < Batt_L_Thrs) {
-          mqtt_publish(mqtt_pathtele, "Status", "LOW Battery");
-          mqtt_publish(mqtt_pathtele, "Battery", String(Batt_Level,0));
-          mqtt_disconnect();
-          telnet_println("Going to sleep forever. Please, recharge the battery ! ! ! ");
-          delay(100);
-          GoingToSleep(0, curUnixTime());   // Sleep forever
-          return Batt_Level;                     // Actually, it will never return !!
-    }
-    return Batt_Level;
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
 }
 
 void status_report() {
     if (BattPowered) {
-<<<<<<< HEAD
         Batt_OK_check();                    // Update Battery Level and sleeps If LOW Batt.
         if (Batt_Level >100) {
             mqtt_publish(mqtt_pathtele, "Status", "Charging");
@@ -191,6 +198,7 @@ void global_reset_button(){
 
 void global_setup() {
     hw_setup();
+    if (config.DEBUG) storage_print();
     
   // Output GPIOs
     if (LED_ESP>=0) {
@@ -207,17 +215,7 @@ void global_setup() {
         pinMode(Reset_Btn, INPUT_PULLUP);
     }
 
-    SLEEPTime = config.SLEEPTime;          // Variable to allow temporary change the sleeptime (ex.: = 0)
+    SLEEPTime = config.SLEEPTime * 60UL;          // Variable [in seconds] to allow temporary change the sleeptime (ex.: = 0)
 }
 
-void global_loop() {
-    global_reset_button();
-=======
-         float Battery = Batt_OK_check();
-         mqtt_publish(mqtt_pathtele, "Status", "Battery");
-         mqtt_publish(mqtt_pathtele, "Battery", String(Battery,0));
-
-    }
-    else mqtt_publish(mqtt_pathtele, "Status", "Mains");
->>>>>>> a229e5ec3f4b409bfe93b378e072607fe225e6c6
-}
+// global_loop() {}  ->located in lib/core/actions.h to be declared at the end of the program.
