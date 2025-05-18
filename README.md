@@ -1,26 +1,41 @@
 # Pera Inteligente - Smart BedSide Cord Switch
 
-This project builds a small and portable device to switch ON/OFF the light of the (bed)room where its (unique) push button is pressed.
-This is the 21st version of the older bedside cord switch used to operate ceil light ON/OFF at confort of the warm bed. : )
+This project builds a small portable device that switches (ON/OFF) the light of the (bed)room when its unique push button is pressed.
+This is the 21st version of the older bedside cord switch used to operate the ceiling light from the comfort of the warm bed. : )
 
 ![Pera](Documents/Pera.jpg)
 
-The "smart" part of the project is just its capability to sniff the "Air" for capture the neibourhood list of "ESP-xxxx" APs with their correspondent RSSI signal strength and publish it via MQTT. This data will processed by an external entity, which will, de facto, identify the right appliance to send the instructions for switch ON/OFF.
+The "smart" part of the project is just have it sending BT beacons, which are then captured and processed by an external entity, that will, de facto, select the right appliance to instruct for ON/OFF switching.
 
 ##
 ## --Hardware--
-This device is based on Espressif **ESP8266** MCU.
 
-The only physical operational interface available is a simple **Push Button**. Its job is just to Start the MCU (RST to GND shunt).
+This device is based on Espressif **ESP32-C3** MCU.
 
-As it is battery powered, the MCU is kept in sleepmode as mush possible and is only waked to measure the ambient and to report those values. In order to reduce its size it is powered by a **LIR2450** Lithium Ion battey. The **Batt Charger** circuit is the typical module [USB Lithium Battery Charger Module Board With Charging And Protection] (https://www.banggood.com/USB-Lithium-Battery-Charger-Module-Board-With-Charging-And-Protection-p-924048.html) located externally. (Obviously), it won't benefit from module's battery protection circuit. Definitely, a TODO point to be solved in near future.
+The only physical operational interface available is a simple **Push Button** to wake up the MCU (RST to GND shunt).
+
+As it is battery-powered, the MCU is kept in sleep mode as much as possible and is only woken to announce its presence. To reduce the size, it is powered by a small **200mAh** Lithium-Ion battery. The **Batt Charger** circuit is the compact module [Type-C USB TP4056 1A Lithium Battery Charging Protection] (https://www.aliexpress.com/item/1005004987359215.html), fitted internally.
 
 
 ##
 ## --Software--
-Being based on my [GitHub albkirk ESP8266_KickStart](https://github.com/albkirk/ESP8266_KickStart), which already included all code required for:
+
+Being based on my [GitHub albkirk ESP-KickStart](https://github.com/albkirk/ESP-KickStart) template, which already included all the code required for:
+
+- Configurable Deep Sleep,
 - Battery Level monitoring,
-- Telnet debuging text output.
-- Wi-Fi monitoring and WLAN network connectivity with Static IP addressing.
+- Telnet debugging text output.
+- Wi-Fi WLAN network connectivity with Static IP addressing.
 - MQTT registration, data subscription and publishing,
-- Remote upgrade via OTA and/or HTTP update.
+- Remote upgrade via OTA.
+
+##
+## --Case--
+
+- [Main Body](Documents/Pera%20Body.stl)
+- [Cover](Documents/Pera%20Cover.stl)
+
+
+<img src="Documents/Foto%20Display.jpg" alt="Foto Display" style="width: 33%;">
+
+<img src="Documents/Inside.png" alt="Complete Wiring" style="width: 50%;">
